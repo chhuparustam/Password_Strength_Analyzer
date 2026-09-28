@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="AEGIS — privacy-first password intelligence. Analysis happens in memory only. Nothing is stored." />
+  <meta name="theme-color" content="#060913" />
+  <title>AEGIS — Password Intelligence</title>
+  <link rel="stylesheet" href="/static/css/style.css" />
+</head>
+<body>
+  <div class="bg" aria-hidden="true">
+    <div class="bg-aurora a1"></div>
+    <div class="bg-aurora a2"></div>
+    <div class="bg-aurora a3"></div>
+    <div class="bg-grid"></div>
+    <div class="bg-vignette"></div>
+  </div>
+
+  <header class="nav">
+    <div class="nav-inner">
+      <a class="logo" href="#top" aria-label="AEGIS home">
+        <span class="logo-mark" aria-hidden="true">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2.5 20 6v6c0 5-3.4 8.3-8 9.5C7.4 20.3 4 16.9 4 12V6l8-3.5z"/>
+            <path d="M8.8 12.1l2.3 2.3 4.2-4.6"/>
+          </svg>
+        </span>
+        <span class="logo-type">AEGIS<em>-lab</em></span>
+        <span class="ver">v2.0</span>
+      </a>
+      <nav class="nav-links" aria-label="Sections">
+        <a href="#analyzer">Console</a>
+        <a href="#intel">Intel</a>
+        <a href="#protocol">Protocol</a>
+      </nav>
+      <div class="live" role="status">
+        <span class="live-dot" aria-hidden="true"></span>
+        <span>LOCAL&nbsp;·&nbsp;SECURE</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap" id="top">
+    <!-- HERO -->
+    <section class="hero">
+      <p class="eyebrow"><span class="pulse" aria-hidden="true"></span>ZERO-KNOWLEDGE ENGINE — NOTHING LEAVES THIS TAB</p>
+      <h1>Forge a <span class="grad">future-proof</span><br />password<span class="dot">.</span></h1>
+      <p class="lede">Type below and watch the core react in real time.<br class="br" />No storage. No logs. Just entropy physics.</p>
+    </section>
+
+    <!-- CONSOLE -->
+    <section class="console" id="analyzer" aria-labelledby="analyzer-title">
+      <!-- LEFT : input + feedback -->
+      <div class="panel main-panel">
+        <div class="term-bar" aria-hidden="true">
+          <span class="t-dot r"></span><span class="t-dot y"></span><span class="t-dot g"></span>
+          <span class="term-addr">aegis://live-console</span>
+          <span class="term-len" id="stat-length">0 chars</span>
+        </div>
+
+        <div class="main-body">
+          <h2 id="analyzer-title" class="sr-only">Analyze your password</h2>
+          <p class="card-hint" id="password-hint">In-memory analysis only — keystrokes never touch disk.</p>
+
+          <label class="field-label" for="password-input">Passphrase input</label>
+          <div class="password-row">
+            <div class="input-shell">
+              <span class="caret" aria-hidden="true">›</span>
+              <input
+                id="password-input"
+                name="password"
+                type="password"
+                autocomplete="new-password"
+                spellcheck="false"
+                placeholder="Type something only you could know…"
+                aria-describedby="password-hint status-line"
+              />
+              <span class="scanline" aria-hidden="true"></span>
+            </div>
+            <button id="toggle-visibility" type="button" aria-pressed="false" aria-label="Show password" title="Show / hide">
+              <svg class="ic-eye" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/>
+              </svg>
+              <svg class="ic-eye-off" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M17.94 17.94A10.6 10.6 0 0 1 12 19c-6.5 0-10-7-10-7a17.6 17.6 0 0 1 4.06-4.94M9.9 4.24A10.6 10.6 0 0 1 12 5c6.5 0 10 7 10 7a17.7 17.7 0 0 1-2.16 3.19M9.88 9.88a3 3 0 1 0 4.24 4.24"/><line x1="2" y1="2" x2="22" y2="22"/>
+              </svg>
+            </button>
+            <button id="clear-button" type="button" aria-label="Clear password" title="Clear">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
+            </button>
+          </div>
+
+          <div id="error-banner" class="error-banner" role="alert" hidden></div>
+
+          <div class="strength-block">
+            <div class="strength-meta">
+              <span class="strength-caption">STRENGTH VECTOR</span>
+              <p id="status-line" class="sr-status" aria-live="polite">Awaiting input.</p>
+            </div>
+            <div id="meter" class="meter" role="progressbar" aria-label="Password strength" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+              <div id="meter-fill" class="meter-fill" style="width: 0%"></div>
+            </div>
+            <div class="ticks" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div>
+            <div class="score-line">
+              <strong id="score-value" class="score-dup" aria-live="polite">– / 100</strong>
+              <span id="strength-label" class="strength-pill strength-idle">Awaiting input</span>
+              <span class="variety" id="stat-variety">— classes</span>
+            </div>
+          </div>
+
+          <div class="intel-grid" id="intel">
+            <section class="mini" aria-labelledby="checks-title">
+              <h3 id="checks-title"><span class="h-num">01</span>Requirement matrix</h3>
+              <ul id="checks-list" class="checks-list">
+                <li id="check-length" class="check idle"><span class="check-icon" aria-hidden="true">○</span><span class="check-text">12+ characters</span><span class="check-hint">LEN</span></li>
+                <li id="check-upper" class="check idle"><span class="check-icon" aria-hidden="true">○</span><span class="check-text">Uppercase A–Z</span><span class="check-hint">ABC</span></li>
+                <li id="check-lower" class="check idle"><span class="check-icon" aria-hidden="true">○</span><span class="check-text">Lowercase a–z</span><span class="check-hint">abc</span></li>
+                <li id="check-digit" class="check idle"><span class="check-icon" aria-hidden="true">○</span><span class="check-text">Digit 0–9</span><span class="check-hint">123</span></li>
+                <li id="check-special" class="check idle"><span class="check-icon" aria-hidden="true">○</span><span class="check-text">Symbol !@#$%</span><span class="check-hint">#*!</span></li>
+              </ul>
+            </section>
+            <section class="mini" aria-labelledby="warnings-title">
+              <h3 id="warnings-title"><span class="h-num">02</span>Threat scan</h3>
+              <ul id="warnings-list" class="warnings-list" role="status" aria-live="polite">
+                <li class="muted">Enter a password to begin.</li>
+              </ul>
+            </section>
+            <section class="mini" aria-labelledby="suggestions-title">
+              <h3 id="suggestions-title"><span class="h-num">03</span>Hardening protocol</h3>
+              <ul id="suggestions-list" class="suggestions-list">
+                <li class="muted">Recommendations will appear here.</li>
+              </ul>
+            </section>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT : reactor core -->
+      <aside class="panel core" aria-label="Live strength core">
+        <div class="core-top">
+          <span class="core-tag">● LIVE CORE</span>
+          <span class="core-id">NODE-07</span>
+        </div>
+        <div class="ring-wrap" id="ring-wrap" data-tier="idle">
+          <svg class="ring" width="220" height="220" viewBox="0 0 220 220" role="img" aria-label="Strength ring">
+            <circle class="ring-track" cx="110" cy="110" r="88" />
+            <circle class="ring-glow" id="ring-glow" cx="110" cy="110" r="88" />
+            <circle class="ring-fill" id="ring-fill" cx="110" cy="110" r="88" />
+          </svg>
+          <div class="ring-center">
+            <div class="ring-score"><span id="score-big">–</span><small>/100</small></div>
+            <div class="ring-sub" id="ring-sub">STANDBY</div>
+          </div>
+          <div class="orbit o1" aria-hidden="true"></div>
+          <div class="orbit o2" aria-hidden="true"></div>
+        </div>
+        <div class="core-stats">
+          <div class="cstat"><span class="k">Entropy class</span><span class="v" id="stat-entropy">—</span></div>
+          <div class="cstat"><span class="k">Pattern risk</span><span class="v" id="stat-risk">—</span></div>
+          <div class="cstat"><span class="k">Diversity</span><span class="v" id="stat-unique">—</span></div>
+        </div>
+        <div class="core-note">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          <p>Heuristic 0–100 · not a crack-time guarantee. Payload sent as JSON over this session only.</p>
+        </div>
+      </aside>
+    </section>
+
+    <!-- PROTOCOL STRIP -->
+    <section class="strip" id="protocol" aria-labelledby="protocol-title">
+      <h2 id="protocol-title" class="sr-only">Protocol</h2>
+      <div class="strip-card">
+        <span class="s-ic" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span>
+        <div><strong>Zero storage</strong><p>Never written to disk, logs or cache. Headers force no-store.</p></div>
+      </div>
+      <div class="strip-card">
+        <span class="s-ic" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8z"/></svg></span>
+        <div><strong>In-memory only</strong><p>Scored and discarded. POST JSON only — never URLs.</p></div>
+      </div>
+      <div class="strip-card bands-card" id="scoring" aria-labelledby="scoring-title">
+        <span class="s-ic" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20h18M6 16v-5m6 5V8m6 8v-9"/></svg></span>
+        <div>
+          <strong id="scoring-title">Transparent bands</strong>
+          <ul class="bands">
+            <li><b>0–19</b>Very Weak</li>
+            <li><b>20–39</b>Weak</li>
+            <li><b>40–59</b>Moderate</li>
+            <li><b>60–79</b>Strong</li>
+            <li><b>80–100</b>Very Strong</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <footer class="site-footer" id="privacy">
+      <p>AEGIS Lab · heuristic signal only — use a password manager + MFA for real security.</p>
+    </footer>
+  </main>
+
+  <script src="/static/js/app.js" defer></script>
+</body>
+</html>
